@@ -650,9 +650,9 @@ EVENTS: Dict[int, Dict[str, Union[Alert, Callable[[Any, messaging.SubMaster, boo
     ET.NO_ENTRY: NoEntryAlert("No Data from Device Sensors"),
   },
 
-  EventName.noGps: {
-    ET.PERMANENT: no_gps_alert,
-  },
+  #EventName.noGps: {
+  #  ET.PERMANENT: no_gps_alert,
+  #},
 
   EventName.soundsUnavailable: {
     ET.PERMANENT: NormalPermanentAlert("Speaker not found", "Reboot your Device"),
@@ -701,8 +701,8 @@ EVENTS: Dict[int, Dict[str, Union[Alert, Callable[[Any, messaging.SubMaster, boo
   },
 
   EventName.seatbeltNotLatched: {
-    ET.SOFT_DISABLE: SoftDisableAlert("Seatbelt Unlatched"),
-    ET.NO_ENTRY: NoEntryAlert("Seatbelt Unlatched"),
+    #ET.SOFT_DISABLE: SoftDisableAlert("Seatbelt Unlatched"),
+    #ET.NO_ENTRY: NoEntryAlert("Seatbelt Unlatched"),
   },
 
   EventName.espDisabled: {
