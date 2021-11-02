@@ -515,13 +515,13 @@ EVENTS: Dict[int, Dict[str, Union[Alert, Callable[[Any, messaging.SubMaster, boo
       Priority.LOW, VisualAlert.none, AudibleAlert.none, .0, .1, .1),
   },
 
-  EventName.steerSaturated: {
-    ET.WARNING: Alert(
-      "TAKE CONTROL",
-      "Turn Exceeds Steering Limit",
-      AlertStatus.userPrompt, AlertSize.mid,
-      Priority.LOW, VisualAlert.steerRequired, AudibleAlert.chimePrompt, 1., 1., 1.),
-  },
+  #EventName.steerSaturated: {
+  #  ET.WARNING: Alert(
+  #    "TAKE CONTROL",
+  #    "Turn Exceeds Steering Limit",
+  #    AlertStatus.userPrompt, AlertSize.mid,
+  #    Priority.LOW, VisualAlert.steerRequired, AudibleAlert.chimePrompt, 1., 1., 1.),
+  #},
 
   EventName.pqTimebombWarn: {
     ET.WARNING: Alert(
