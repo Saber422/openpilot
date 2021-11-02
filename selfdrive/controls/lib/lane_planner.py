@@ -9,7 +9,7 @@ from selfdrive.swaglog import cloudlog
 
 TRAJECTORY_SIZE = 33
 
-CAMERA_OFFSET = 0.0
+CAMERA_OFFSET = 0.06
 PATH_OFFSET = 0.2
 
 
