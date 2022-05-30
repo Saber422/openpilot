@@ -110,8 +110,8 @@ class CarInterface(CarInterfaceBase):
 
     events = self.create_common_events(ret, extra_gears=[GearShifter.eco, GearShifter.sport])
 
-    if self.CS.leftBlinker:
-      events.add(EventName.buttonEnable)
+    # if self.CS.leftBlinker:
+      # events.add(EventName.buttonEnable)
 
     #PQTIMEBOMB STUFF START
     #Warning alert for the 6min timebomb found on PQ's
