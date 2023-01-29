@@ -64,7 +64,7 @@ class CarInterface(CarInterfaceBase):
 
     ret.mass = 1617+100+STD_CARGO_KG
     ret.wheelbase = 2.68
-    ret.minSteerSpeed = 20 * CV.KPH_TO_MS
+    ret.minSteerSpeed = 50 * CV.KPH_TO_MS #TEST
 
     ret.centerToFront = ret.wheelbase * 0.4
 
