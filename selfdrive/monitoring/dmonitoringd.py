@@ -21,7 +21,7 @@ def dmonitoringd_thread(sm=None, pm=None):
   sm['carState'].buttonEvents = []
   sm['carState'].standstill = True
 
-  driver_engaged = False
+  driver_engaged = True
 
   # 10Hz <- dmonitoringmodeld
   while True:
