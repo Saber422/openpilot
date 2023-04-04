@@ -297,6 +297,7 @@ class CarState(CarStateBase):
       ("GRA_Typ_Hauptschalter", "GRA_ACC_01"),   # ACC main button type
       ("GRA_Codierung", "GRA_ACC_01"),           # ACC button configuration/coding
       ("GRA_Tip_Stufe_2", "GRA_ACC_01"),         # unknown related to stalk type
+      ("GRA_Typ468", "GRA_ACC_01"),      # GRA speed limiter button present
       ("GRA_ButtonTypeInfo", "GRA_ACC_01"),      # unknown related to stalk type
       ("COUNTER", "GRA_ACC_01"),                 # GRA_ACC_01 CAN message counter
     ]
