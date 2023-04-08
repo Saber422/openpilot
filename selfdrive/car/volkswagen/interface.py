@@ -161,7 +161,7 @@ class CarInterface(CarInterfaceBase):
     elif candidate == CAR.TRANSPORTER_T61:
       ret.mass = 1926 + STD_CARGO_KG
       ret.wheelbase = 3.00  # SWB, LWB is 3.40, TBD how to detect difference
-      ret.minSteerSpeed = 14.0
+      # ret.minSteerSpeed = 14.0
 
     elif candidate == CAR.TROC_MK1:
       ret.mass = 1413 + STD_CARGO_KG
