@@ -146,6 +146,8 @@ class CAR:
 
 PQ_CARS = {CAR.PASSAT_NMS, CAR.SHARAN_MK2}
 
+STANDING_RESUME_SPAM_CARS = {CAR.POLO_MK6, CAR.TCROSS_MK1, CAR.TROC_MK1, CAR.SKODA_KAMIQ_MK1,
+                             CAR.SKODA_SCALA_MK1, CAR.TRANSPORTER_T61}
 
 DBC: Dict[str, Dict[str, str]] = defaultdict(lambda: dbc_dict("vw_mqb_2010", None))
 for car_type in PQ_CARS:
