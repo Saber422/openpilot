@@ -1,7 +1,11 @@
 #pragma once
 
 #include <atomic>
+#include <map>
+#include <memory>
 #include <mutex>
+#include <tuple>
+#include <vector>
 
 #include <QFuture>
 #include <QLabel>
@@ -33,7 +37,6 @@ class Slider : public QSlider {
 
 public:
   Slider(QWidget *parent);
-  ~Slider();
   double currentSecond() const { return value() / factor; }
   void setCurrentSecond(double sec) { setValue(sec * factor); }
   void setTimeRange(double min, double max);
