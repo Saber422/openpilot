@@ -38,6 +38,7 @@ jobs:
     - uses: actions/checkout@v3
       with:
         submodules: true
+    - run: git lfs pull
     - name: Build devel
       timeout-minutes: 1
       run: TARGET_DIR=$STRIPPED_DIR release/build_devel.sh
@@ -65,12 +66,15 @@ jobs:
         cp pyproject.toml $STRIPPED_DIR
         cp poetry.lock $STRIPPED_DIR
         cd $STRIPPED_DIR
-        ${{ env.RUN }} "unset PYTHONWARNINGS && pre-commit run --all"
+        ${{ env.RUN }} "unset PYTHONWARNINGS && SKIP=check-added-large-files pre-commit run --all"
 
   build:
     strategy:
       matrix:
-        arch: ${{ fromJson( (github.repository == 'commaai/openpilot') && '["x86_64", "aarch64"]' || '["x86_64"]' ) }}
+        arch: ${{ fromJson(
+           ((github.repository == 'commaai/openpilot') &&
+              ((github.event_name != 'pull_request') || 
+               (github.event.pull_request.head.repo.full_name == 'commaai/openpilot'))) && '["x86_64", "aarch64"]' || '["x86_64"]' ) }}
     runs-on: ${{ (matrix.arch == 'aarch64') && 'buildjet-2vcpu-ubuntu-2204-arm' || 'ubuntu-20.04' }}
     steps:
     - uses: actions/checkout@v3
@@ -78,6 +82,7 @@ jobs:
         submodules: true
     - uses: ./.github/workflows/setup-with-retry
       with:
+        docker_hub_pat: ${{ secrets.DOCKER_HUB_PAT }}
         cache_key_prefix: scons_${{ matrix.arch }}
     - uses: ./.github/workflows/compile-openpilot
       timeout-minutes: ${{ ((steps.restore-scons-cache.outputs.cache-hit == 'true') && 15 || 30) }} # allow more time when we missed the scons cache
@@ -91,6 +96,7 @@ jobs:
     - uses: actions/checkout@v3
       with:
         submodules: true
+    - run: git lfs pull
     - name: Determine pre-existing Homebrew packages
       if: steps.dependency-cache.outputs.cache-hit != 'true'
       run: |
@@ -136,7 +142,7 @@ jobs:
         fi
     - name: Install dependencies
       if: steps.dependency-cache.outputs.cache-hit != 'true'
-      run: ./tools/mac_setup.sh
+      run: SKIP_PROMPT=1 ./tools/mac_setup.sh
       env:
         # package install has DeprecationWarnings
         PYTHONWARNINGS: default
@@ -177,6 +183,7 @@ jobs:
         sudo rm -rf /Applications/ArmGNUToolchain/*/*/.fseventsd
 
   docker_push:
+    name: docker push
     strategy:
       matrix:
         arch: ${{ fromJson( (github.repository == 'commaai/openpilot') && '["x86_64", "aarch64"]' || '["x86_64"]' ) }}
@@ -193,7 +200,7 @@ jobs:
         $DOCKER_LOGIN
     - uses: ./.github/workflows/setup-with-retry
       with:
-        git-lfs: false
+        docker_hub_pat: ${{ secrets.DOCKER_HUB_PAT }}
     - name: Build and push CL Docker image
       if: matrix.arch == 'x86_64'
       run: |
@@ -224,8 +231,7 @@ jobs:
     - uses: actions/checkout@v3
       with:
         submodules: true
-    - name: Build Docker image
-      run: eval "$BUILD"
+    - uses: ./.github/workflows/setup-with-retry
     - name: pre-commit
       timeout-minutes: 4
       run: ${{ env.RUN }} "unset PYTHONWARNINGS && pre-commit run --all"
@@ -260,7 +266,7 @@ jobs:
       timeout-minutes: ${{ ((steps.restore-scons-cache.outputs.cache-hit == 'true') && 10 || 30) }} # allow more time when we missed the scons cache
       run: ${{ env.RUN }} "scons -j$(nproc)"
     - name: Run unit tests
-      timeout-minutes: 40
+      timeout-minutes: 15
       run: |
         ${{ env.RUN }} "export SKIP_LONG_TESTS=1 && \
                         $PYTEST -n auto --dist=loadscope --timeout 30 -o cpp_files=test_* && \
@@ -274,12 +280,16 @@ jobs:
 
   process_replay:
     name: process replay
-    runs-on: ${{ ((github.event.pull_request.head.repo.full_name == 'commaai/openpilot') || (github.repository == 'commaai/openpilot')) && 'buildjet-8vcpu-ubuntu-2004' || 'ubuntu-20.04' }}
+    runs-on: ${{ ((github.repository == 'commaai/openpilot') &&
+                   ((github.event_name != 'pull_request') || 
+                    (github.event.pull_request.head.repo.full_name == 'commaai/openpilot'))) && 'buildjet-8vcpu-ubuntu-2004' || 'ubuntu-20.04' }}
     steps:
     - uses: actions/checkout@v3
       with:
         submodules: true
     - uses: ./.github/workflows/setup-with-retry
+      with:
+        docker_hub_pat: ${{ secrets.DOCKER_HUB_PAT }}
     - name: Cache test routes
       id: dependency-cache
       uses: actions/cache@v3
@@ -299,7 +309,7 @@ jobs:
       id: print-diff
       if: always()
       run: cat selfdrive/test/process_replay/diff.txt
-    - uses: actions/upload-artifact@v2
+    - uses: actions/upload-artifact@v3
       if: always()
       continue-on-error: true
       with:
@@ -384,6 +394,7 @@ jobs:
         with:
           submodules: true
           ref: ${{ github.event.pull_request.base.ref }}
+      - run: git lfs pull
       - uses: ./.github/workflows/setup-with-retry
       - name: Get base car info
         run: |
@@ -393,6 +404,7 @@ jobs:
         with:
           submodules: true
           path: current
+      - run: cd current && git lfs pull
       - name: Save car docs diff
         id: save_diff
         run: |
