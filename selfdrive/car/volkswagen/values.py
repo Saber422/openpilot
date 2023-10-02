@@ -1,6 +1,6 @@
 from collections import defaultdict, namedtuple
 from dataclasses import dataclass, field
-from enum import Enum
+from enum import Enum, StrEnum
 from typing import Dict, List, Union
 
 from cereal import car
@@ -114,7 +114,7 @@ class CANBUS:
 # FW_VERSIONS for that existing CAR.
 # Exception: SEAT Leon and SEAT Ateca share a chassis code
 
-class CAR:
+class CAR(StrEnum):
   ARTEON_MK1 = "VOLKSWAGEN ARTEON 1ST GEN"          # Chassis AN, Mk1 VW Arteon and variants
   ATLAS_MK1 = "VOLKSWAGEN ATLAS 1ST GEN"            # Chassis CA, Mk1 VW Atlas and Atlas Cross Sport
   CRAFTER_MK2 = "VOLKSWAGEN CRAFTER 2ND GEN"        # Chassis SY/SZ, Mk2 VW Crafter, VW Grand California, MAN TGE
@@ -163,7 +163,7 @@ class Footnote(Enum):
     Column.MODEL)
   SKODA_HEATED_WINDSHIELD = CarFootnote(
     "Some Škoda vehicles are equipped with heated windshields, which are known " +
-    "to block GPS signal needed for some comma three functionality.",
+    "to block GPS signal needed for some comma 3X functionality.",
     Column.MODEL)
   VW_EXP_LONG = CarFootnote(
     "Only available for vehicles using a gateway (J533) harness. At this time, vehicles using a camera harness " +
@@ -186,7 +186,7 @@ class VWCarInfo(CarInfo):
       self.footnotes.append(Footnote.SKODA_HEATED_WINDSHIELD)
 
     if CP.carFingerprint in (CAR.CRAFTER_MK2, CAR.TRANSPORTER_T61):
-      self.car_parts = CarParts([Device.three_angled_mount, CarHarness.j533])
+      self.car_parts = CarParts([Device.threex_angled_mount, CarHarness.j533])
 
 
 CAR_INFO: Dict[str, Union[VWCarInfo, List[VWCarInfo]]] = {
