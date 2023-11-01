@@ -2,13 +2,17 @@
 
 #include <map>
 #include <memory>
+#include <set>
 
-#include <QLabel>
+#include <QHBoxLayout>
+#include <QFrame>
 #include <QSlider>
+#include <QTabBar>
 #include <QToolButton>
 
 #include "selfdrive/ui/qt/widgets/cameraview.h"
-#include "tools/cabana/streams/replaystream.h"
+#include "tools/cabana/util.h"
+#include "tools/replay/logreader.h"
 
 struct AlertInfo {
   cereal::ControlsState::AlertStatus status;
@@ -39,6 +43,8 @@ public:
   QPixmap thumbnail(double sec);
   void parseQLog(int segnum, std::shared_ptr<LogReader> qlog);
 
+  const double factor = 1000.0;
+
 signals:
   void updateMaximumTime(double);
 
@@ -48,7 +54,6 @@ private:
   bool event(QEvent *event) override;
   void paintEvent(QPaintEvent *ev) override;
 
-  const double factor = 1000.0;
   QMap<uint64_t, QPixmap> thumbnails;
   std::map<uint64_t, AlertInfo> alerts;
   InfoLabel thumbnail_label;
@@ -63,16 +68,24 @@ public:
   void setMaximumTime(double sec);
 
 protected:
+  QString formatTime(double sec, bool include_milliseconds = false);
   void updateState();
   void updatePlayBtnState();
   QWidget *createCameraWidget();
+  QHBoxLayout *createPlaybackController();
+  void loopPlaybackClicked();
+  void vipcAvailableStreamsUpdated(std::set<VisionStreamType> streams);
 
   CameraWidget *cam_widget;
   double maximum_time = 0;
-  QLabel *end_time_label;
-  QLabel *time_label;
-  QToolButton *play_btn;
-  QToolButton *skip_to_end_btn = nullptr;
-  InfoLabel *alert_label;
-  Slider *slider;
+  QToolButton *time_btn = nullptr;
+  ToolButton *seek_backward_btn = nullptr;
+  ToolButton *play_btn = nullptr;
+  ToolButton *seek_forward_btn = nullptr;
+  ToolButton *loop_btn = nullptr;
+  QToolButton *speed_btn = nullptr;
+  ToolButton *skip_to_end_btn = nullptr;
+  InfoLabel *alert_label = nullptr;
+  Slider *slider = nullptr;
+  QTabBar *camera_tab = nullptr;
 };
