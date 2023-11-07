@@ -31,7 +31,7 @@ class CarControllerParams:
   STEER_DRIVER_FACTOR = 1        # from dbc
 
 class CANBUS:
-  pt = 0
+  pt = 1
   cam = 2
 
 class DBC_FILES:
