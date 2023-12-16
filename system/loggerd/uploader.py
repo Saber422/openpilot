@@ -19,13 +19,13 @@ from openpilot.common.realtime import set_core_affinity
 from openpilot.system.hardware import TICI
 from openpilot.system.hardware.hw import Paths
 from openpilot.system.loggerd.xattr_cache import getxattr, setxattr
-from openpilot.system.swaglog import cloudlog
+from openpilot.common.swaglog import cloudlog
 
 NetworkType = log.DeviceState.NetworkType
 UPLOAD_ATTR_NAME = 'user.upload'
 UPLOAD_ATTR_VALUE = b'1'
 
-UPLOAD_QLOG_QCAM_MAX_SIZE = 100 * 1e6  # MB
+UPLOAD_QLOG_QCAM_MAX_SIZE = 5 * 1e6  # MB
 
 allow_sleep = bool(os.getenv("UPLOADER_SLEEP", "1"))
 force_wifi = os.getenv("FORCEWIFI") is not None
@@ -228,7 +228,7 @@ class Uploader:
     return success
 
   def get_msg(self):
-    msg = messaging.new_message("uploaderState")
+    msg = messaging.new_message("uploaderState", valid=True)
     us = msg.uploaderState
     us.immediateQueueSize = int(self.immediate_size / 1e6)
     us.immediateQueueCount = self.immediate_count
