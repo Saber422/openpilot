@@ -11,4 +11,4 @@ if [ -z "$AGNOS_VERSION" ]; then
 fi
 
 export STAGING_ROOT="/data/safe_staging"
-export FINGERPRINT="VOLKSWAGEN TIGUAN 2ND GEN"
+export FINGERPRINT="VOLKSWAGEN_TIGUAN_MK2"
