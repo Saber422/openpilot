@@ -209,6 +209,7 @@ env = Environment(
     "#third_party/qrcode",
     "#third_party",
     "#cereal",
+    "#msgq",
     "#opendbc/can",
     "#third_party/maplibre-native-qt/include",
     f"#third_party/maplibre-native-qt/{arch}/include"
@@ -224,9 +225,10 @@ env = Environment(
   CXXFLAGS=["-std=c++1z"] + cxxflags,
   LIBPATH=libpath + [
     "#cereal",
+    "#msgq",
     "#third_party",
     "#opendbc/can",
-    "#selfdrive/boardd",
+    "#selfdrive/pandad",
     "#common",
     "#rednose/helpers",
   ],
@@ -357,6 +359,7 @@ gpucommon = [_gpucommon]
 Export('common', 'gpucommon')
 
 # Build cereal and messaging
+SConscript(['msgq/SConscript'])
 SConscript(['cereal/SConscript'])
 
 # Build other submodules
