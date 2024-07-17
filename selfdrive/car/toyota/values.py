@@ -128,6 +128,7 @@ class CAR(Platforms):
       ToyotaCarDocs("Toyota Camry Hybrid 2021-24"),
     ],
     TOYOTA_CAMRY.specs,
+    flags=ToyotaFlags.RADAR_ACC,
   )
   TOYOTA_CHR = PlatformConfig(
     [
