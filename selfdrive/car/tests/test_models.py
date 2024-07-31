@@ -12,14 +12,13 @@ from parameterized import parameterized_class
 from cereal import messaging, log, car
 from openpilot.common.basedir import BASEDIR
 from openpilot.common.params import Params
-from openpilot.common.realtime import DT_CTRL
-from openpilot.selfdrive.car import gen_empty_fingerprint
-from openpilot.selfdrive.car.card import Car
+from openpilot.selfdrive.car import DT_CTRL, gen_empty_fingerprint
 from openpilot.selfdrive.car.fingerprints import all_known_cars, MIGRATION
 from openpilot.selfdrive.car.car_helpers import FRAME_FINGERPRINT, interfaces
 from openpilot.selfdrive.car.honda.values import CAR as HONDA, HondaFlags
 from openpilot.selfdrive.car.tests.routes import non_tested_cars, routes, CarTestRoute
 from openpilot.selfdrive.car.values import Platform
+from openpilot.selfdrive.car.card import Car
 from openpilot.selfdrive.test.helpers import read_segment_list
 from openpilot.system.hardware.hw import DEFAULT_DOWNLOAD_CACHE_ROOT
 from openpilot.tools.lib.logreader import LogReader, internal_source, openpilotci_source
@@ -298,7 +297,7 @@ class TestCarModelBase(unittest.TestCase):
 
         now_nanos += DT_CTRL * 1e9
         msgs_sent += len(sendcan)
-        for addr, _, dat, bus in sendcan:
+        for addr, dat, bus in sendcan:
           to_send = libpanda_py.make_CANPacket(addr, bus % 4, dat)
           self.assertTrue(self.safety.safety_tx_hook(to_send), (addr, dat, bus))
 

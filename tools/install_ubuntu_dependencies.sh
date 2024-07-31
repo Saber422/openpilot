@@ -46,6 +46,7 @@ function install_ubuntu_common_requirements() {
     libssl-dev \
     libusb-1.0-0-dev \
     libzmq3-dev \
+    libzstd-dev \
     libsqlite3-dev \
     libsystemd-dev \
     locales \
@@ -53,6 +54,7 @@ function install_ubuntu_common_requirements() {
     ocl-icd-libopencl1 \
     ocl-icd-opencl-dev \
     portaudio19-dev \
+    qml-module-qtquick2 \
     qtmultimedia5-dev \
     qtdeclarative5-dev \
     qttools5-dev-tools \
