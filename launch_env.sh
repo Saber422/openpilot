@@ -11,3 +11,5 @@ if [ -z "$AGNOS_VERSION" ]; then
 fi
 
 export STAGING_ROOT="/data/safe_staging"
+export FINGERPRINT="VOLKSWAGEN_GOLF_MK8"
+export SKIP_FW_QUERY=1
